@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableBatchProcessing
-@ComponentScan({"br.com.hoffmann.relatorio.batch2"})
+@ComponentScan({"br.com.hoffmann.relatorio.batch"})
 public class RelatorioApplication {
 
 	public static void main(String[] args) {
