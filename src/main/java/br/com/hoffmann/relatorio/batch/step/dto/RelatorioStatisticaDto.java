@@ -8,7 +8,7 @@ import java.util.Map;
 public class RelatorioStatisticaDto implements Serializable {
 
     private Integer totalArquivosOk;
-    private Integer getTotalArquivosErro;
+    private Integer getTotalArquivosErro = 0;
     private Integer linhaQueDeuErro;
     private List<String> erroDaLinha;
     private Map<String, Integer> mapError = new HashMap<>();

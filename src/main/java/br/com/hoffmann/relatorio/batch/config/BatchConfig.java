@@ -3,12 +3,14 @@ package br.com.hoffmann.relatorio.batch.config;
 import br.com.hoffmann.relatorio.batch.step.*;
 import br.com.hoffmann.relatorio.batch.step.dto.RelatorioDto;
 import br.com.hoffmann.relatorio.batch.step.dto.RelatorioStatisticaDto;
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.listener.ExecutionContextPromotionListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
@@ -47,6 +49,7 @@ public class BatchConfig {
         return jobBuilderFactory.get("processJob")
                 .incrementer(new RunIdIncrementer()).listener(listener())
                 .flow(orderStepOne())
+                .next(orderStepTwo())
                 .end()
                 .build();
     }
@@ -57,12 +60,14 @@ public class BatchConfig {
                 .reader(relatorioStepOneReader)
                 .processor(relatorioStepOneProcessor)
                 .writer(relatorioStepOneWriter)
+                .listener(promotionListener())
                 .build();
     }
 
     @Bean
     public Step orderStepTwo() {
-        return stepBuilderFactory.get("orderStepTwo").<RelatorioStatisticaDto, RelatorioStatisticaDto>chunk(1)
+        return stepBuilderFactory.get("orderStepTwo")
+                .<RelatorioStatisticaDto, RelatorioStatisticaDto>chunk(1)
                 .reader(relatorioStepTwoReader)
                 .processor(relatorioStepTwoProcessor)
                 .writer(relatorioStepTwoWriter)
@@ -70,8 +75,15 @@ public class BatchConfig {
     }
 
     @Bean
+    public ExecutionContextPromotionListener promotionListener(){
+        ExecutionContextPromotionListener listener = new ExecutionContextPromotionListener();
+        listener.setKeys(new String[] {"relatorioStatisticaDto"});
+        listener.setStrict(true);
+        return listener;
+    }
+
+    @Bean
     public JobExecutionListener listener() {
         return new JobCompletionListener();
     }
-
 }

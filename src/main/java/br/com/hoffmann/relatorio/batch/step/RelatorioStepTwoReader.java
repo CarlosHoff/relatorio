@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 public class RelatorioStepTwoReader implements ItemReader<RelatorioStatisticaDto> {
 
     private RelatorioStatisticaDto relatorioStatisticaDto;
+    private boolean batchJobState = false;
 
     @BeforeStep
     public void retrieveInterStepData(StepExecution stepExecution) {
@@ -25,6 +26,10 @@ public class RelatorioStepTwoReader implements ItemReader<RelatorioStatisticaDto
 
     @Override
     public RelatorioStatisticaDto read() {
-        return relatorioStatisticaDto;
+        if(!batchJobState){
+            batchJobState=true;
+            return relatorioStatisticaDto;
+        }
+        return null;
     }
 }

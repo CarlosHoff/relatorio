@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.BeforeStep;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -70,6 +71,10 @@ public class RelatorioStepOneWriter implements ItemWriter<RelatorioDto> {
             }
             relatorioStatisticaDto.setMapError(mapError);
         }
+
+        relatorioStatisticaDto.setErroDaLinha(listaAuxiliar);
+        ExecutionContext stepContext = this.stepExecution.getExecutionContext();
+        stepContext.put("relatorioStatisticaDto", relatorioStatisticaDto);
 
     }
 
