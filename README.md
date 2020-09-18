@@ -8,6 +8,17 @@ API E-commerce
   <li>JDK 1.8 ou superior</li>
   <li>Git</li>
   <li>Maven</li>
+</ul>
+
+<h3>Dependências do projeto</h3>
+<ul>
+  <li>Spring-Boot</li>
+  <li>Spring-Batch</li>
+  <li>JPA</li>
+</ul>
+
+<h3>Banco de dados</h3>
+<ul>
   <li>Postgresql</li>
 </ul>
 
